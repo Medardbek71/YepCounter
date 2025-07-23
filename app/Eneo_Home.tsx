@@ -1,13 +1,28 @@
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import { Image } from "expo-image";
 import { View } from "@/components/Themed";
 import { router } from "expo-router";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import CompterList from "@/components/CompterList";
+import databaseService from "@/services/DatabaseService";
 
 const Eneo_Home = () => {
+  const [compterList, setCompterList] = useState([]);
+  useEffect(() => {
+    const loadCompter = async (): Promise<void> => {
+      const response = await databaseService.getAllCompter();
+      if (response.success) {
+        setCompterList(response.data);
+        console.log(compterList);
+      } else {
+        console.log(response.error);
+      }
+    };
+    loadCompter();
+  }, []);
   return (
     <View style={styles.container}>
+      {compterList && <Text>Le pied de yagami</Text>}
       <View
         style={{
           display: "flex",
