@@ -7,13 +7,14 @@ import {
 } from "react-native";
 import PrincipalButton from "@/components/PrincipalButton";
 import { Image } from "expo-image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Colors from "@/constants/Colors";
+import { useLocalSearchParams } from "expo-router";
+import databaseService from "@/services/DatabaseService";
 
 const rechargeCompter = () => {
   const [amount, setAmount] = useState<number>();
   const [compterLabel, setCompterLabel] = useState<string>("");
-
   const handleAction = () => {
     alert("la souris");
   };

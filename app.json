@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "MoneyLook",
-    "slug": "MoneyLook",
+    "slug": "moneylook",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -21,7 +21,8 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.medard_bekoung.moneylook"
     },
     "web": {
       "bundler": "metro",
@@ -34,6 +35,13 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "8a6d6c18-6555-48d7-9aca-b29ac43765eb"
+      }
+    },
+    "owner": "medard_bekoung"
   }
 }

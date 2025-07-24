@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     position: "absolute",
-    bottom: 40,
+    bottom: 250,
   },
   text: {
     fontSize: 20,

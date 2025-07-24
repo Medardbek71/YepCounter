@@ -54,7 +54,10 @@ class DatabaseService {
         data: results,
       };
     } catch (error) {
-      console.error("nous rencontrons une erreur", error);
+      console.error(
+        "nous rencontrons une erreur lors de la recuperation de tous les utilisateurs",
+        error
+      );
       return {
         success: false,
         error,

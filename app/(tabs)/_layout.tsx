@@ -4,7 +4,6 @@ import { Tabs } from "expo-router";
 
 import Colors from "@/constants/Colors";
 import { useColorScheme } from "@/components/useColorScheme";
-import { initDatabase } from "@/database/init";
 
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>["name"];
@@ -29,9 +28,22 @@ export default function TabLayout() {
           display: "flex",
           flexDirection: "row",
           justifyContent: "center",
-          position: "absolute",
-          left: "50%",
           alignSelf: "center",
+          borderRadius: 20,
+          backgroundColor: "green",
+        },
+        tabBarIconStyle: {
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+          width: 75,
+          height: 50,
+          // backgroundColor: "red",
+        },
+        tabBarLabelStyle: {
+          fontSize: 10,
+          color: "white",
         },
       }}
     >
@@ -39,14 +51,16 @@ export default function TabLayout() {
         name="home"
         options={{
           title: "Home",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
         }}
       />
       <Tabs.Screen
         name="stats"
         options={{
           title: "Statistique",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="bar-chart" color={color} />
+          ),
         }}
       />
     </Tabs>
