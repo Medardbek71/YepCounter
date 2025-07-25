@@ -18,23 +18,30 @@ const addCompter = () => {
   const [compterLabel, setCompterLabel] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
-  // ✅ Fonction pour valider les données
   const validateInputs = (): boolean => {
     if (!compterNumber.trim()) {
       Alert.alert("Erreur", "Veuillez entrer le numéro du compteur");
       return false;
     }
+
     if (!compterLabel.trim()) {
       Alert.alert("Erreur", "Veuillez entrer le nom du compteur");
       return false;
     }
-    if (compterNumber.length < 5) {
+
+    if (!compterNumber.startsWith("014") || (compterNumber.length !== 12)) {
+      Alert.alert("Erreur", "Le numero de compteur est incorrecte");
+      return false;
+    }
+
+    if (!/^\d+$/.test(compterNumber)) {
       Alert.alert(
         "Erreur",
-        "Le numéro du compteur doit contenir au moins 5 chiffres"
+        "Le numéro du compteur ne doit contenir que des chiffres"
       );
       return false;
     }
+
     return true;
   };
 
@@ -155,7 +162,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     paddingTop: 20,
-    justifyContent: "space-between",
   },
   backButton: {
     marginBottom: 10,

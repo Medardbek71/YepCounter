@@ -29,7 +29,7 @@ const CompterList = () => {
               router.push({
                 pathname: "/rechargeCompter",
                 params: {
-                  compterData: compter,
+                  data: JSON.stringify(compter),
                 },
               })
             }

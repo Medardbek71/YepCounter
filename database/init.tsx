@@ -7,8 +7,9 @@ export const initDatabase = async () => {
       await db.execAsync(`
         CREATE TABLE IF NOT EXISTS CompterEneo (
           idCompterEneo INTEGER PRIMARY KEY,
-          label VARCHAR(45) ,
-          number TEXT
+          label VARCHAR(45),
+          number TEXT,
+          lastSubscription DATETIME
         )
         `);
     } catch (error) {
@@ -22,7 +23,8 @@ export const initDatabase = async () => {
         CREATE TABLE IF NOT EXISTS CanalAbo (
           idCanalAbo INTEGER PRIMARY KEY,
           abonementNumber INTEGER ,
-          label VARCHAR(45)
+          label VARCHAR(45),
+          lastSubscription DATETIME
         )
       `);
     } catch (error) {

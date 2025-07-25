@@ -46,7 +46,7 @@ const RechargeCanal = () => {
             }}
           />
         </TouchableOpacity>
-        <View style={{ margin: 15 }}>
+        <View style={{ margin: 15, marginTop: 50 }}>
           <Text style={{ fontSize: 36 }}>Télé du Salon</Text>
         </View>
         <View style={styles.textInputLabel}>

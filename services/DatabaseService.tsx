@@ -1,3 +1,111 @@
+// import { compterQueries } from "@/database/query";
+// import * as SQLite from "expo-sqlite";
+
+// interface DatabaseResponse<T = any> {
+//   success?: boolean;
+//   data?: T;
+//   error?: any;
+//   insertedId?: number;
+//   change?: number;
+// }
+
+// class DatabaseService {
+//   private db: SQLite.SQLiteDatabase | null;
+//   constructor() {
+//     this.db = null;
+//   }
+
+//   async initDb(): Promise<SQLite.SQLiteDatabase> {
+//     if (!this.db) {
+//       this.db = await SQLite.openDatabaseAsync("MoneyLook.db");
+//     }
+//     return this.db;
+//   }
+
+//   async createCompter(
+//     label: string,
+//     number: string
+//   ): Promise<DatabaseResponse> {
+//     const db = await this.initDb();
+//     try {
+//       const results = await db.runAsync(compterQueries.createCompter, [
+//         label,
+//         number,
+//       ]);
+//       return {
+//         success: true,
+//         insertedId: results.lastInsertRowId,
+//       };
+//     } catch (error) {
+//       console.error("erreur lors de la création du compteur", error);
+//       return {
+//         success: false,
+//         error,
+//       };
+//     }
+//   }
+
+//   async getAllCompter(): Promise<DatabaseResponse> {
+//     const db = await this.initDb();
+//     try {
+//       console.log("étoile de bonaberi");
+//       const results = await db.getAllAsync(compterQueries.getAllCompter);
+//       return {
+//         success: true,
+//         data: results,
+//       };
+//     } catch (error) {
+//       console.error(
+//         "nous rencontrons une erreur lors de la recuperation de tous les utilisateurs",
+//         error
+//       );
+//       return {
+//         success: false,
+//         error,
+//       };
+//     }
+//   }
+
+//   async getCompterById(id: number): Promise<DatabaseResponse> {
+//     const db = await this.initDb();
+//     try {
+//       const results = await db?.getFirstAsync(compterQueries.getCompterById, [
+//         id,
+//       ]);
+//       return {
+//         success: true,
+//         data: results,
+//       };
+//     } catch (error) {
+//       console.error("erreur lors de la recuperation du compteur", error);
+//       return {
+//         success: false,
+//         error,
+//       };
+//     }
+//   }
+
+//   async deleteCompter(id: number): Promise<DatabaseResponse> {
+//     const db = await this.initDb();
+//     try {
+//       const results = db.runAsync(compterQueries.deleteCompter, [id]);
+//       return {
+//         success: true,
+//         data: results,
+//       };
+//     } catch (error) {
+//       console.error("erreur lors de la suppression du compteur", error);
+//       return {
+//         success: false,
+//         error,
+//       };
+//     }
+//   }
+// }
+
+// const databaseService = new DatabaseService();
+// export default databaseService;
+
 import { compterQueries } from "@/database/query";
 import * as SQLite from "expo-sqlite";
 
@@ -11,23 +119,62 @@ interface DatabaseResponse<T = any> {
 
 class DatabaseService {
   private db: SQLite.SQLiteDatabase | null;
+  private isInitialized: boolean;
+
   constructor() {
     this.db = null;
+    this.isInitialized = false;
   }
 
   async initDb(): Promise<SQLite.SQLiteDatabase> {
     if (!this.db) {
-      this.db = await SQLite.openDatabaseAsync("MoneyLook.db");
+      try {
+        this.db = await SQLite.openDatabaseAsync("MoneyLook.db");
+
+        // IMPORTANT: Créer les tables si elles n'existent pas
+        if (!this.isInitialized) {
+          await this.createTables();
+          this.isInitialized = true;
+        }
+      } catch (error) {
+        console.error(
+          "Erreur lors de l'ouverture de la base de données:",
+          error
+        );
+        throw error;
+      }
     }
     return this.db;
+  }
+
+  // Méthode pour créer les tables
+  private async createTables(): Promise<void> {
+    if (!this.db) return;
+
+    try {
+      // Créez votre table compteurs (adaptez selon votre schéma)
+      await this.db.execAsync(`
+        CREATE TABLE IF NOT EXISTS compteurs (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          label TEXT NOT NULL,
+          number TEXT NOT NULL UNIQUE,
+          created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        );
+      `);
+
+      console.log("Tables créées avec succès");
+    } catch (error) {
+      console.error("Erreur lors de la création des tables:", error);
+      throw error;
+    }
   }
 
   async createCompter(
     label: string,
     number: string
   ): Promise<DatabaseResponse> {
-    const db = await this.initDb();
     try {
+      const db = await this.initDb();
       const results = await db.runAsync(compterQueries.createCompter, [
         label,
         number,
@@ -46,8 +193,9 @@ class DatabaseService {
   }
 
   async getAllCompter(): Promise<DatabaseResponse> {
-    const db = await this.initDb();
     try {
+      const db = await this.initDb();
+      console.log("étoile de bonaberi");
       const results = await db.getAllAsync(compterQueries.getAllCompter);
       return {
         success: true,
@@ -66,9 +214,9 @@ class DatabaseService {
   }
 
   async getCompterById(id: number): Promise<DatabaseResponse> {
-    const db = await this.initDb();
     try {
-      const results = await db?.getFirstAsync(compterQueries.getCompterById, [
+      const db = await this.initDb();
+      const results = await db.getFirstAsync(compterQueries.getCompterById, [
         id,
       ]);
       return {
@@ -85,9 +233,9 @@ class DatabaseService {
   }
 
   async deleteCompter(id: number): Promise<DatabaseResponse> {
-    const db = await this.initDb();
     try {
-      const results = db.runAsync(compterQueries.deleteCompter, [id]);
+      const db = await this.initDb();
+      const results = await db.runAsync(compterQueries.deleteCompter, [id]);
       return {
         success: true,
         data: results,
@@ -98,6 +246,30 @@ class DatabaseService {
         success: false,
         error,
       };
+    }
+  }
+
+  // Méthode pour fermer la base de données proprement
+  async closeDb(): Promise<void> {
+    if (this.db) {
+      await this.db.closeAsync();
+      this.db = null;
+      this.isInitialized = false;
+    }
+  }
+
+  // Méthode pour réinitialiser la base de données (utile pour debug)
+  async resetDb(): Promise<void> {
+    try {
+      await this.closeDb();
+      // Supprimer et recréer la base
+      this.db = await SQLite.openDatabaseAsync("MoneyLook.db");
+      await this.db.execAsync("DROP TABLE IF EXISTS compteurs;");
+      await this.createTables();
+      this.isInitialized = true;
+    } catch (error) {
+      console.error("Erreur lors de la réinitialisation:", error);
+      throw error;
     }
   }
 }
