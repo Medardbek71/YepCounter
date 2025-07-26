@@ -29,7 +29,7 @@ const addCompter = () => {
       return false;
     }
 
-    if (!compterNumber.startsWith("014") || (compterNumber.length !== 12)) {
+    if (!compterNumber.startsWith("014") || compterNumber.length !== 12) {
       Alert.alert("Erreur", "Le numero de compteur est incorrecte");
       return false;
     }
@@ -55,7 +55,6 @@ const addCompter = () => {
     try {
       setLoading(true);
 
-      // Garder le numéro en string pour préserver les zéros en tête (01423)
       const response = await databaseService.createCompter(
         compterLabel.trim(),
         compterNumber.trim()
@@ -96,14 +95,6 @@ const addCompter = () => {
   return (
     <View style={styles.container}>
       <View>
-        {/* ✅ Bouton de retour ajouté */}
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => router.back()}
-        >
-          <Text style={styles.backText}>← Retour</Text>
-        </TouchableOpacity>
-
         <TouchableOpacity>
           <Image
             source={require("@/assets/images/eneo-logo.svg")}

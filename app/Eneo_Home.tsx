@@ -4,7 +4,6 @@ import { View } from "@/components/Themed";
 import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
 import CompterList from "@/components/CompterList";
-import databaseService from "@/services/DatabaseService";
 
 const Eneo_Home = () => {
   return (

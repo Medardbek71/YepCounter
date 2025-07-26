@@ -3,8 +3,13 @@ import { Image } from "expo-image";
 import PrincipalButton from "@/components/PrincipalButton";
 import Colors from "@/constants/Colors";
 import React, { useState } from "react";
+import { useLocalSearchParams } from "expo-router";
 
 const RechargeCanal = () => {
+  const { data } = useLocalSearchParams();
+  console.log(data);
+  const rechargeInfo = data ? JSON.parse(data as any) : null;
+
   const handleAction = () => {
     alert("la souris");
   };
@@ -47,11 +52,11 @@ const RechargeCanal = () => {
           />
         </TouchableOpacity>
         <View style={{ margin: 15, marginTop: 50 }}>
-          <Text style={{ fontSize: 36 }}>Télé du Salon</Text>
+          <Text style={{ fontSize: 36 }}>{rechargeInfo.label}</Text>
         </View>
         <View style={styles.textInputLabel}>
           <Text style={styles.label}>Numéro de réabonnement</Text>
-          <Text style={styles.label}>014XXXXXXXXX</Text>
+          <Text style={styles.label}>{rechargeInfo.abonementNumber}</Text>
         </View>
         <View
           style={{

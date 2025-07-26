@@ -106,7 +106,7 @@
 // const databaseService = new DatabaseService();
 // export default databaseService;
 
-import { compterQueries } from "@/database/query";
+import { compterQueries, canalQueries } from "@/database/query";
 import * as SQLite from "expo-sqlite";
 
 interface DatabaseResponse<T = any> {
@@ -184,7 +184,7 @@ class DatabaseService {
         insertedId: results.lastInsertRowId,
       };
     } catch (error) {
-      console.error("erreur lors de la création du compteur", error);
+      console.error("erreur lors de la création du compte canal", error);
       return {
         success: false,
         error,
@@ -242,6 +242,63 @@ class DatabaseService {
       };
     } catch (error) {
       console.error("erreur lors de la suppression du compteur", error);
+      return {
+        success: false,
+        error,
+      };
+    }
+  }
+
+  async createCanal(label: string, number: number): Promise<DatabaseResponse> {
+    try {
+      const db = await this.initDb();
+      const results = await db.runAsync(canalQueries.createCanal, [
+        label,
+        number,
+      ]);
+      return {
+        success: true,
+        insertedId: results.lastInsertRowId,
+      };
+    } catch (error) {
+      console.error("erreur lors de la création du compteur", error);
+      return {
+        success: false,
+        error,
+      };
+    }
+  }
+
+  async getCanalById(id: number): Promise<DatabaseResponse> {
+    try {
+      const db = await this.initDb();
+      const results = await db.getFirstAsync(canalQueries.getCanalById, [id]);
+      return {
+        success: true,
+        data: results,
+      };
+    } catch (error) {
+      console.error("erreur lors de la recuperation du compteur", error);
+      return {
+        success: false,
+        error,
+      };
+    }
+  }
+
+  async getAllCanal(): Promise<DatabaseResponse> {
+    try {
+      const db = await this.initDb();
+      const results = await db.getAllAsync(canalQueries.getAllCanal);
+      return {
+        success: true,
+        data: results,
+      };
+    } catch (error) {
+      console.error(
+        "nous rencontrons une erreur lors de la recuperation de tous les abonements",
+        error
+      );
       return {
         success: false,
         error,

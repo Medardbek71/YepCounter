@@ -1,52 +1,48 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { router } from "expo-router";
 import Colors from "@/constants/Colors";
+import databaseService from "@/services/DatabaseService";
 
 const CanalList = () => {
+  const [listOfCanal, setListOfCanal] = useState([]);
+  useEffect(() => {
+    const loadAllCanal = async (): Promise<void> => {
+      const response = await databaseService.getAllCanal();
+      if (response.success) {
+        setListOfCanal(response.data);
+        console.log("Voici la listes des abonement disponibles", listOfCanal);
+      } else {
+        console.error(response.error);
+      }
+    };
+    loadAllCanal();
+  }, []);
   return (
     <View>
       <Text style={{ marginVertical: 20 }}>Liste des comptes disponibles</Text>
-      <TouchableOpacity
-        onPress={() => router.push("/rechargeCanal")}
-        style={styles.canalItem}
-      >
-        <Text style={{ fontWeight: 700 }}>Télé du salon</Text>
-        <Text style={{ fontWeight: 300 }}>
-          Derniere recharge le: 12/10/2025
-        </Text>
-        <Text style={{ fontWeight: 300 }}>Access +</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => router.push("/rechargeCanal")}
-        style={styles.canalItem}
-      >
-        <Text style={{ fontWeight: 700 }}>Télé du salon</Text>
-        <Text style={{ fontWeight: 300 }}>
-          Derniere recharge le: 12/10/2025
-        </Text>
-        <Text style={{ fontWeight: 300 }}>Access +</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => router.push("/rechargeCanal")}
-        style={styles.canalItem}
-      >
-        <Text style={{ fontWeight: 700 }}>Télé du salon</Text>
-        <Text style={{ fontWeight: 300 }}>
-          Derniere recharge le: 12/10/2025
-        </Text>
-        <Text style={{ fontWeight: 300 }}>Access +</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => router.push("/rechargeCanal")}
-        style={styles.canalItem}
-      >
-        <Text style={{ fontWeight: 700 }}>Télé du salon</Text>
-        <Text style={{ fontWeight: 300 }}>
-          Derniere recharge le: 12/10/2025
-        </Text>
-        <Text style={{ fontWeight: 300 }}>Access +</Text>
-      </TouchableOpacity>
+      {listOfCanal.map((canal) => {
+        return (
+          <TouchableOpacity
+            key={canal.id}
+            onPress={() =>
+              router.push({
+                pathname: "/rechargeCanal",
+                params: {
+                  data: JSON.stringify(canal),
+                },
+              })
+            }
+            style={styles.canalItem}
+          >
+            <Text style={{ fontWeight: 700 }}>{canal.label}</Text>
+            <Text style={{ fontWeight: 300 }}>
+              Derniere recharge le: 12/10/2025
+            </Text>
+            <Text style={{ fontWeight: 300 }}>Access +</Text>
+          </TouchableOpacity>
+        );
+      })}
     </View>
   );
 };
