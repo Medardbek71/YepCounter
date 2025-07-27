@@ -14,6 +14,8 @@ export const canalQueries = {
 
 export const daily_ReportQuery = {
   createReport: `INSERT INTO Daily_Report ( amount , reason ) VALUES (?,?)`,
+  getMonthlySpendedAmount:`SELECT SUM(amount) FROM daily_Report 
+WHERE created_at >= DATE('now', '-7 days');`,
   getAllReport: `SELECT * FROM Daily_Report`,
   getReportById: `SELECT * FROM Daily_Report WHERE idDaily_Report = ?`,
   deleteReport: `DELETE FROM Daily_Report WHERE idDaily_Report = ?`,

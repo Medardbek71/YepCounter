@@ -4,17 +4,52 @@ import {
   View,
   TouchableOpacity,
   TextInput,
+  Alert,
 } from "react-native";
 import { Image } from "expo-image";
 import React, { useState } from "react";
 import PrincipalButton from "@/components/PrincipalButton";
 import Colors from "@/constants/Colors";
+import databaseService from "@/services/DatabaseService";
+import { router } from "expo-router";
 
 const daily_report = () => {
-  const [amount, setAmount] = useState<number>();
-  const [reason, setReason] = useState<string>();
-  const handleAction = () => {
-    alert("Moussa");
+  const [amount, setAmount] = useState<number | undefined>(undefined);
+  const [reason, setReason] = useState<string>("");
+
+  const handleAction = async (): Promise<void> => {
+    try {
+      if (reason.trim() === "" || !amount || amount <= 0) {
+        Alert.alert("Les champs ne sont pas correctement remplis");
+      }
+      const response = await databaseService.createReport(
+        reason.trim(),
+        amount as number
+      );
+
+      if (response.success) {
+        router.back();
+      }
+    } catch (error) {
+      console.log("Une erreur c'est produite");
+      console.error(error);
+    }
+  };
+
+  const addReport = async (): Promise<void> => {
+    try {
+      if (reason.trim() === "" || !amount || amount <= 0) {
+        Alert.alert("Les champs ne sont pas correctement remplis");
+      }
+      const response = await databaseService.createReport(
+        reason.trim(),
+        amount as number
+      );
+
+      setAmount(undefined), setReason("");
+    } catch (error) {
+      console.error(error);
+    }
   };
   return (
     <View style={styles.container}>
@@ -36,8 +71,11 @@ const daily_report = () => {
         <View style={styles.textInputLabel}>
           <Text style={styles.label}>Montant de la dépense</Text>
           <TextInput
-            value={reason}
-            onChangeText={(text) => setReason(text)}
+            value={amount?.toString()}
+            onChangeText={(text) => {
+              const numericValue = parseInt(text);
+              setAmount(isNaN(numericValue) ? undefined : numericValue);
+            }}
             placeholder="200 Francs"
             keyboardType="numeric"
             style={styles.textInput}
@@ -46,16 +84,13 @@ const daily_report = () => {
         <View>
           <Text style={styles.label}>Raison de dépense</Text>
           <TextInput
-            value={amount?.toString()}
-            onChangeText={() => setAmount(amount)}
-            placeholder="transport , alimentation , internet"
+            value={reason}
+            onChangeText={(text) => setReason(text)}
+            placeholder={"transport , alimentation , internet"}
             style={styles.textInput}
           />
         </View>
-        <TouchableOpacity
-          onPress={() => alert("ajouter")}
-          style={styles.addButton}
-        >
+        <TouchableOpacity onPress={() => addReport()} style={styles.addButton}>
           <Text>ajouter a la liste</Text>
         </TouchableOpacity>
         <Text> 0 dépenses ajouter a la liste</Text>
@@ -91,6 +126,7 @@ const styles = StyleSheet.create({
     padding: 4,
     borderRadius: 5,
     alignSelf: "center",
+    color: "black",
   },
   textInputLabel: {
     marginVertical: 20,
