@@ -226,6 +226,26 @@ class DatabaseService {
     }
   }
 
+  async getAllReport(): Promise<DatabaseResponse> {
+    try {
+      const db = await this.initDb();
+      const results = await db.getAllAsync(daily_ReportQuery.getAllReport);
+      return {
+        success: true,
+        data: results,
+      };
+    } catch (error) {
+      console.error(
+        "nous rencontrons une erreur lors de la recuperation de tous les reports",
+        error
+      );
+      return {
+        success: false,
+        error,
+      };
+    }
+  }
+
   // Méthode pour fermer la base de données proprement
   async closeDb(): Promise<void> {
     if (this.db) {
