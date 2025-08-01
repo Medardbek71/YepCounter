@@ -14,6 +14,8 @@ import { useColorScheme } from "@/components/useColorScheme";
 import { StatusBar } from "expo-status-bar";
 import { initDatabase } from "@/database/init";
 import { Text } from "react-native";
+import { Provider } from "react-redux";
+import { store } from "@/store/store";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -88,10 +90,12 @@ function RootLayoutNav() {
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <SafeAreaView style={{ flex: 1 }}>
-        <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
-        <Stack screenOptions={{ headerShown: false }} />
-      </SafeAreaView>
+      <Provider store={store}>
+        <SafeAreaView style={{ flex: 1 }}>
+          <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
+          <Stack screenOptions={{ headerShown: false }} />
+        </SafeAreaView>
+      </Provider>
     </ThemeProvider>
   );
 }

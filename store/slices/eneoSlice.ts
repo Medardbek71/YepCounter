@@ -75,13 +75,17 @@ export const getCompterById = createAsyncThunk<
   }
 });
 
+// ✅ Correction: Types corrects pour deleteCompter
 export const deleteCompter = createAsyncThunk<
+  Compter[], // ✅ Retourner la liste mise à jour
   DeleteCompterParams,
   { rejectValue: ErrorResponse }
 >("eneoSlice/deleteCompter", async ({ id }, { rejectWithValue }) => {
   try {
-    const result = await databaseService.deleteCompter(id);
-    return result;
+    await databaseService.deleteCompter(id);
+    // ✅ Récupérer la liste mise à jour après suppression
+    const updatedData = await databaseService.getAllCompter();
+    return updatedData;
   } catch (error: any) {
     return rejectWithValue({ message: error.message });
   }
@@ -139,6 +143,7 @@ const eneoSlice = createSlice({
     builder.addCase(createCompter.fulfilled, (state, action) => {
       state.data = action.payload;
       state.loading = false;
+      state.lastUpdated = new Date().toISOString();
     });
     builder.addCase(createCompter.rejected, (state, action) => {
       state.loading = false;
@@ -151,7 +156,8 @@ const eneoSlice = createSlice({
       state.error = null;
     });
     builder.addCase(getCompterById.fulfilled, (state, action) => {
-      state.data = action.payload; // ou ajouter à une propriété dédiée
+      // ✅ Option: Vous pourriez ajouter une propriété 'selectedCompter' au state
+      state.data = action.payload;
       state.loading = false;
     });
     builder.addCase(getCompterById.rejected, (state, action) => {
@@ -167,6 +173,7 @@ const eneoSlice = createSlice({
     builder.addCase(deleteCompter.fulfilled, (state, action) => {
       state.data = action.payload;
       state.loading = false;
+      state.lastUpdated = new Date().toISOString();
     });
     builder.addCase(deleteCompter.rejected, (state, action) => {
       state.loading = false;

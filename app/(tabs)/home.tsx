@@ -2,10 +2,11 @@ import { StyleSheet, TouchableOpacity } from "react-native";
 import { Image } from "expo-image";
 import Colors from "@/constants/Colors";
 import { router } from "expo-router";
-
 import { Text, View } from "@/components/Themed";
+import { useCompter } from "@/hooks/useCompter";
 
 export default function TabOneScreen() {
+  const { compter } = useCompter();
   return (
     <View style={styles.container}>
       <View style={styles.content}>
