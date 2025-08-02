@@ -35,9 +35,10 @@ export const initDatabase = async () => {
         CREATE TABLE IF NOT EXISTS Daily_Report (
           idDaily_Report INTEGER PRIMARY KEY,
           amount INTEGER ,
-          reason VARCHAR(45)
+          reason VARCHAR
           )
       `);
+      console.log("Creation reussite de la table report");
     } catch (error) {
       console.error(
         "erreur lors de la creation de la table Daily_Report",

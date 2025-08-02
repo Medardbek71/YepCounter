@@ -12,6 +12,7 @@ import PrincipalButton from "@/components/PrincipalButton";
 import Colors from "@/constants/Colors";
 import databaseService from "@/services/DatabaseService";
 import { router } from "expo-router";
+import { getDateDuJour } from "@/utils/date";
 
 const daily_report = () => {
   const [amount, setAmount] = useState<number | undefined>(undefined);
@@ -23,8 +24,8 @@ const daily_report = () => {
         Alert.alert("Les champs ne sont pas correctement remplis");
       }
       const response = await databaseService.createReport(
-        reason.trim(),
-        amount as number
+        amount as number,
+        reason.trim()
       );
 
       if (response.success) {
@@ -40,13 +41,14 @@ const daily_report = () => {
     try {
       if (reason.trim() === "" || !amount || amount <= 0) {
         Alert.alert("Les champs ne sont pas correctement remplis");
-      }
-      const response = await databaseService.createReport(
-        reason.trim(),
-        amount as number
-      );
+      } else {
+        const response = await databaseService.createReport(
+          amount as number,
+          reason.trim()
+        );
 
-      setAmount(undefined), setReason("");
+        setAmount(undefined), setReason("");
+      }
     } catch (error) {
       console.error(error);
     }
@@ -66,7 +68,7 @@ const daily_report = () => {
         </TouchableOpacity>
         <View style={{ margin: 15 }}>
           <Text style={{ fontSize: 36 }}>Bilan de la journée</Text>
-          <Text style={{ fontSize: 15 }}>Mardi le 15 juillet 2025</Text>
+          <Text style={{ fontSize: 15 }}>{getDateDuJour()}</Text>
         </View>
         <View style={styles.textInputLabel}>
           <Text style={styles.label}>Montant de la dépense</Text>

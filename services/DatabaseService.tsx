@@ -203,16 +203,18 @@ class DatabaseService {
   }
 
   async createReport(
-    reason: string,
-    amount: number
+    amount: number,
+    reason: string
   ): Promise<DatabaseResponse> {
     try {
       const db = await this.initDb();
       const results = await db.runAsync(daily_ReportQuery.createReport, [
-        reason,
         amount,
+        reason,
+        // Date.now(),
       ]);
-      console.log("bilan ajouté");
+      console.log("bilan ajouté de", amount);
+      console.log(results.lastInsertRowId);
       return {
         success: true,
         insertedId: results.lastInsertRowId,
@@ -237,6 +239,29 @@ class DatabaseService {
     } catch (error) {
       console.error(
         "nous rencontrons une erreur lors de la recuperation de tous les reports",
+        error
+      );
+      return {
+        success: false,
+        error,
+      };
+    }
+  }
+
+  async getMonthlySpended(): Promise<DatabaseResponse> {
+    try {
+      const db = await this.initDb();
+      const results = await db.getAllAsync(
+        daily_ReportQuery.getMonthlySpendedAmount
+      );
+      console.log(results[0]);
+      return {
+        success: true,
+        data: results[0].totalAmount,
+      };
+    } catch (error) {
+      console.error(
+        "nous rencontrons une erreur lors de la recuperation de la somme total dépensé",
         error
       );
       return {

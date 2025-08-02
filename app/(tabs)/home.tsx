@@ -4,18 +4,20 @@ import Colors from "@/constants/Colors";
 import { router } from "expo-router";
 import { Text, View } from "@/components/Themed";
 import { useCompter } from "@/hooks/useCompter";
+import { getDateDuJour } from "@/utils/date";
+import MonthlySpendedAmount from "@/components/MonthlySpendedAmount";
 
 export default function TabOneScreen() {
   const { compter } = useCompter();
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.dateText}>Mercredi le 17 Juillet 2025</Text>
+        <Text style={styles.dateText}>{getDateDuJour()}</Text>
 
         <TouchableOpacity
           style={[styles.box, { backgroundColor: Colors.dark.turquoise }]}
         >
-          <Text style={styles.amountText}>12 500 FCFA</Text>
+          <Text style={styles.amountText}>{<MonthlySpendedAmount />}</Text>
           <Text style={styles.descriptionText}>
             dépenser depuis le début du mois
           </Text>
