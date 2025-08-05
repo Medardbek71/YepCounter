@@ -1,32 +1,36 @@
-import { StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
-import databaseService from "@/services/DatabaseService";
-import { formatNumber } from "@/utils/formatNumber";
+import { Text } from "@/components/Themed";
+import { useCompter } from "@/hooks/useCompter";
 
 const MonthlySpendedAmount = () => {
-  const [totalMonthlySpend, setTotalMonthlySpend] = useState();
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        const response = await databaseService.getMonthlySpended();
-        if (response.success) {
-          setTotalMonthlySpend(response.data);
-          console.log(
-            "voici la somme totale dépensé depuis le début du mois",
-            totalMonthlySpend
-          );
-        } else {
-          console.error(response.error);
-        }
-      } catch (error) {
-        console.error(error);
+  const { compter, loading, error } = useCompter();
+  console.log(compter);
+  if (loading) {
+    return <Text>Chargement...</Text>;
+  }
+
+  if (error) {
+    return <Text>Erreur: {error}</Text>;
+  }
+
+  // Exemple de calcul du montant dépensé (à adapter selon votre logique métier)
+  const calculateMonthlyAmount = () => {
+    try {
+      if (!compter || compter.length === 0) {
+        return "0 FCFA";
       }
-    };
-    loadData();
-  }, []);
-  return <Text>{formatNumber(totalMonthlySpend)} FCFA</Text>;
+      console.log(compter['data']);
+      const total = compter["data"].reduce(
+        (sum, item) => sum + (item.amount || 0),
+        0
+      );
+      return `${total.toLocaleString()} FCFA`;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return <Text>{calculateMonthlyAmount()}</Text>;
 };
 
 export default MonthlySpendedAmount;
-
-const styles = StyleSheet.create({});

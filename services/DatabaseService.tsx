@@ -248,29 +248,6 @@ class DatabaseService {
     }
   }
 
-  async getMonthlySpended(): Promise<DatabaseResponse> {
-    try {
-      const db = await this.initDb();
-      const results = await db.getAllAsync(
-        daily_ReportQuery.getMonthlySpendedAmount
-      );
-      console.log(results[0]);
-      return {
-        success: true,
-        data: results[0].totalAmount,
-      };
-    } catch (error) {
-      console.error(
-        "nous rencontrons une erreur lors de la recuperation de la somme total dépensé",
-        error
-      );
-      return {
-        success: false,
-        error,
-      };
-    }
-  }
-
   // Méthode pour fermer la base de données proprement
   async closeDb(): Promise<void> {
     if (this.db) {
