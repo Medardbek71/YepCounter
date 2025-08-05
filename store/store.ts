@@ -1,10 +1,12 @@
 // store/index.ts
 import { configureStore } from "@reduxjs/toolkit";
 import eneoReducer from "./slices/eneoSlice";
+import reportReducer from "./slices/reportSlice";
 
 export const store = configureStore({
   reducer: {
     eneo: eneoReducer, // ✅ Le nom doit correspondre à celui utilisé dans le selector
+    report: reportReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

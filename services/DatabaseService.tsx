@@ -237,10 +237,7 @@ class DatabaseService {
         data: results,
       };
     } catch (error) {
-      console.error(
-        "nous rencontrons une erreur lors de la recuperation de tous les reports",
-        error
-      );
+      console.error("error report", error);
       return {
         success: false,
         error,

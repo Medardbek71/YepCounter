@@ -62,17 +62,15 @@ export const useCompter = () => {
     }
   };
 
-  // ✅ Correction: Appeler la fonction fetchData
   const refreshCompter = () => {
     dispatch(fetchData());
   };
 
   return {
-    // ✅ Correction: Retourner 'data' au lieu de 'compter' qui n'existe pas
     compter: data,
     loading,
     error,
-    lastUpdated, // ✅ Correction: Orthographe
+    lastUpdated,
     createCompter: handleNewCompter,
     getCompterById: handleGetCompterById,
     deleteCompter: handleDeleteCompter,

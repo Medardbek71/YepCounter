@@ -6,23 +6,24 @@ interface ErrorResponseInterface {
   code?: string;
 }
 
-interface ReportInterface {
-    amount:number,
-    reason:string
+interface Report {
+  id: string;
+  amount: number;
 }
 
-const ReportInitialState  {
-    data: ReportInterface[];
-    loading:boolean;
-    error:string||null;
-}
+const initialState = {
+  reports: [],
+  error: null,
+  loading: false,
+};
 
 export const getAllReport = createAsyncThunk<
+  Report[],
   void,
   { rejectValue: ErrorResponseInterface }
 >("reportSlice/getAllReport", async (_, { rejectWithValue }) => {
   try {
-    const datas = databaseService.getAllReport();
+    const datas = await databaseService.getAllReport();
     return datas;
   } catch (error: any) {
     console.error(error);
@@ -30,11 +31,24 @@ export const getAllReport = createAsyncThunk<
   }
 });
 
-const reportSlice = createSlice({
-    name:"reportSlice",
-    initialState:[],
-    extraReducers:(builder) =>{
+export const reportSlice = createSlice({
+  name: "report",
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(getAllReport.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(getAllReport.fulfilled, (state, action) => {
+      state.loading = false;
+      state.reports = action.payload;
+    });
+    builder.addCase(getAllReport.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload?.message || "Erreur inconnue";
+    });
+  },
+});
 
-    }
-
-})
+export default reportSlice.reducer;
