@@ -13,7 +13,7 @@ export const canalQueries = {
 };
 
 export const daily_ReportQuery = {
-  createReport: `INSERT INTO Daily_Report ( amount , reason) VALUES (?,?)`,
+  createReport: `INSERT INTO Daily_Report ( amount , reason , created_at) VALUES (?,?,?)`,
   getMonthlySpendedAmount: `SELECT SUM(amount) as totalAmount FROM Daily_Report `,
   getAllReport: `SELECT * FROM Daily_Report`,
   getReportById: `SELECT * FROM Daily_Report WHERE idDaily_Report = ?`,

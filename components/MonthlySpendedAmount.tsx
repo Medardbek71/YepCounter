@@ -1,42 +1,16 @@
-// import React, { useEffect, useState } from "react";
-// import { Text } from "@/components/Themed";
-// import { useReport } from "@/hooks/useReport";
-
-// const MonthlySpendedAmount = () => {
-//   const { reports, loading, error } = useReport();
-//   // console.log(reports, loading, error);
-//   if (loading) {
-//     return <Text>Chargement...</Text>;
-//   }
-
-//   if (error) {
-//     return <Text>Erreur: {error}</Text>;
-//   }
-
-//   // Exemple de calcul du montant dépensé (à adapter selon votre logique métier)
-//   const calculateMonthlyAmount = () => {
-//     try {
-//       if (!reports || reports.length === 0) {
-//         return "0 FCFA";
-//       }
-//       const total = reports.reduce((sum, item) => sum + (item.amount || 0), 0);
-//       return `${total.toLocaleString()} FCFA`;
-//     } catch (error) {
-//       console.error(error);
-//     }
-//   };
-
-//   return <Text>{calculateMonthlyAmount()}</Text>;
-// };
-
-// export default MonthlySpendedAmount;
-
-import React from "react";
+import React, { useCallback } from "react";
 import { Text } from "@/components/Themed";
 import { useReport } from "@/hooks/useReport";
+import { useFocusEffect } from "expo-router";
 
 const MonthlySpendedAmount = () => {
-  const { reports, loading, error } = useReport();
+  const { reports, loading, error, refetch } = useReport();
+
+  useFocusEffect(
+    useCallback(() => {
+      refetch();
+    }, [refetch])
+  );
 
   console.log(
     "Debug - reports:",
@@ -82,3 +56,58 @@ const MonthlySpendedAmount = () => {
 };
 
 export default MonthlySpendedAmount;
+
+// import React, { useCallback } from "react";
+// import { Text } from "@/components/Themed";
+// import { useReport } from "@/hooks/useReport";
+// import { useFocusEffect } from "expo-router";
+
+// const MonthlySpendedAmount = () => {
+//   const { reports, loading, error, refetch } = useReport();
+
+//   // Recharge les données à chaque focus
+//   useFocusEffect(
+//     useCallback(() => {
+//       let isActive = true;
+
+//       if (isActive) {
+//         refetch();
+//       }
+
+//       return () => {
+//         isActive = false;
+//       };
+//     }, [refetch])
+//   );
+
+//   if (loading) {
+//     return <Text>Chargement...</Text>;
+//   }
+
+//   if (error) {
+//     return <Text>Erreur: {error}</Text>;
+//   }
+
+//   // Mémoïsation du calcul
+//   const monthlyAmount = React.useMemo(() => {
+//     try {
+//       if (!reports?.data?.length) {
+//         return "0 FCFA";
+//       }
+
+//       const total = reports.data.reduce((sum: number, item: any) => {
+//         const amount = item?.amount || 0;
+//         return sum + amount;
+//       }, 0);
+
+//       return `${total.toLocaleString()} FCFA`;
+//     } catch (error) {
+//       console.error("Erreur de calcul:", error);
+//       return "Erreur de calcul";
+//     }
+//   }, [reports]);
+
+//   return <Text>{monthlyAmount}</Text>;
+// };
+
+// export default MonthlySpendedAmount;

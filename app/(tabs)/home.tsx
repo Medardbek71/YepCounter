@@ -1,13 +1,37 @@
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { Image } from "expo-image";
 import Colors from "@/constants/Colors";
-import { router } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import { Text, View } from "@/components/Themed";
 import { useCompter } from "@/hooks/useCompter";
 import { getDateDuJour } from "@/utils/date";
 import MonthlySpendedAmount from "@/components/MonthlySpendedAmount";
+import { clearAllData, resetDatabase } from "@/database/init";
+import { useCallback } from "react";
+import * as Notifications from "expo-notifications";
 
 export default function TabOneScreen() {
+  // First, set the handler that will cause the notification
+  // to show the alert
+  Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowBanner: true,
+      shouldShowList: true,
+      shouldPlaySound: false,
+      shouldSetBadge: false,
+    }),
+  });
+
+  // Second, call scheduleNotificationAsync()
+  Notifications.scheduleNotificationAsync({
+    content: {
+      title: "Look at that notification",
+      body: "I'm so proud of myself!",
+    },
+    trigger: null,
+  });
+  // clearAllData();
+  // resetDatabase();
   const { compter } = useCompter();
   return (
     <View style={styles.container}>

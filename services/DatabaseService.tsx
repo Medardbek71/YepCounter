@@ -211,7 +211,7 @@ class DatabaseService {
       const results = await db.runAsync(daily_ReportQuery.createReport, [
         amount,
         reason,
-        // Date.now(),
+        Date.now(),
       ]);
       console.log("bilan ajouté de", amount);
       console.log(results.lastInsertRowId);

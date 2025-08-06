@@ -22,14 +22,15 @@ const daily_report = () => {
     try {
       if (reason.trim() === "" || !amount || amount <= 0) {
         Alert.alert("Les champs ne sont pas correctement remplis");
-      }
-      const response = await databaseService.createReport(
-        amount as number,
-        reason.trim()
-      );
+      } else {
+        const response = await databaseService.createReport(
+          amount as number,
+          reason.trim()
+        );
 
-      if (response.success) {
-        router.back();
+        if (response.success) {
+          router.back();
+        }
       }
     } catch (error) {
       console.log("Une erreur c'est produite");

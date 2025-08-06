@@ -1,19 +1,29 @@
 import { getAllReport } from "../store/slices/reportSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 
 export const useReport = () => {
-  const dispatch = useDispatch<AppDispatch>(); // Ajout des parenthèses
+  const dispatch = useDispatch<AppDispatch>();
 
-  // Renommage pour éviter le conflit avec l'action importée
   const { reports, loading, error } = useSelector(
     (state: RootState) => state.report
   );
 
-  useEffect(() => {
-    dispatch(getAllReport()); // Appel de l'action avec parenthèses
+  // Création d'une fonction de rechargement mémoïsée
+  const refetch = useCallback(async () => {
+    try {
+      await dispatch(getAllReport()).unwrap();
+    } catch (error) {
+      console.error("Erreur lors du rechargement des bilans", error);
+      throw error;
+    }
   }, [dispatch]);
+
+  // Chargement initial
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
 
   const getMonthlySpended = async () => {
     try {
@@ -21,7 +31,7 @@ export const useReport = () => {
       return results;
     } catch (error) {
       console.error(
-        "Nous rencontrons une erreur lors de la récuperation des bilans",
+        "Nous rencontrons une erreur lors de la récupération des bilans",
         error
       );
       throw error;
@@ -32,5 +42,7 @@ export const useReport = () => {
     reports,
     loading,
     error,
+    refetch, // On expose la fonction de rechargement
+    getMonthlySpended, // On conserve la fonction existante
   };
 };
