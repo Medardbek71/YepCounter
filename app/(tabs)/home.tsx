@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { StyleSheet, TextInput, TouchableOpacity } from "react-native";
 import { Image } from "expo-image";
 import Colors from "@/constants/Colors";
 import { router, useFocusEffect } from "expo-router";
@@ -7,31 +7,38 @@ import { useCompter } from "@/hooks/useCompter";
 import { getDateDuJour } from "@/utils/date";
 import MonthlySpendedAmount from "@/components/MonthlySpendedAmount";
 import { clearAllData, resetDatabase } from "@/database/init";
-import { useCallback } from "react";
+import { useState } from "react";
 import * as Notifications from "expo-notifications";
+import { initializeNotifications } from "@/services/NotificationService";
 
 export default function TabOneScreen() {
-  // First, set the handler that will cause the notification
-  // to show the alert
-  Notifications.setNotificationHandler({
-    handleNotification: async () => ({
-      shouldShowBanner: true,
-      shouldShowList: true,
-      shouldPlaySound: false,
-      shouldSetBadge: false,
-    }),
-  });
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
 
-  // Second, call scheduleNotificationAsync()
-  Notifications.scheduleNotificationAsync({
-    content: {
-      title: "Look at that notification",
-      body: "I'm so proud of myself!",
-    },
-    trigger: null,
-  });
+  initializeNotifications();
   // clearAllData();
   // resetDatabase();
+
+  const scheduleNotification = (seconds?: number) => {
+    Notifications.scheduleNotificationAsync({
+      content: { title: title, body: body },
+      trigger:
+        seconds === undefined
+          ? null
+          : {
+              seconds,
+            },
+    });
+  };
+
+  const handleShowNotification = () => {
+    scheduleNotification();
+  };
+
+  const handleScheduleNotification = () => {
+    scheduleNotification(15);
+  };
+
   const { compter } = useCompter();
   return (
     <View style={styles.container}>
@@ -142,6 +149,18 @@ export default function TabOneScreen() {
           </View>
         </TouchableOpacity>
       </View>
+      <TextInput
+        value={title}
+        onChangeText={(Text) => setTitle(Text)}
+        placeholder="title"
+        onPress={() => handleShowNotification()}
+      />
+      <TextInput
+        value={body}
+        onChangeText={(Text) => setTitle(Text)}
+        placeholder="body"
+        onPress={() => handleScheduleNotification}
+      />
     </View>
   );
 }
