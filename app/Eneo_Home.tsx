@@ -1,8 +1,7 @@
-import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import { StyleSheet, TouchableOpacity } from "react-native";
 import { Image } from "expo-image";
 import { View } from "@/components/Themed";
 import { router } from "expo-router";
-import React, { useEffect, useState } from "react";
 import CompterList from "@/components/CompterList";
 
 const Eneo_Home = () => {

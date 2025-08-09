@@ -1,47 +1,27 @@
-import { StyleSheet, TextInput, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  TouchableOpacity,
+  Pressable,
+  ScrollView,
+} from "react-native";
 import { Image } from "expo-image";
 import Colors from "@/constants/Colors";
-import { router, useFocusEffect } from "expo-router";
+import { router } from "expo-router";
 import { Text, View } from "@/components/Themed";
-import { useCompter } from "@/hooks/useCompter";
 import { getDateDuJour } from "@/utils/date";
 import MonthlySpendedAmount from "@/components/MonthlySpendedAmount";
 import { clearAllData, resetDatabase } from "@/database/init";
-import { useState } from "react";
 import * as Notifications from "expo-notifications";
-import { initializeNotifications } from "@/services/NotificationService";
 
 export default function TabOneScreen() {
-  const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
-
-  initializeNotifications();
   // clearAllData();
   // resetDatabase();
 
-  const scheduleNotification = (seconds?: number) => {
-    Notifications.scheduleNotificationAsync({
-      content: { title: title, body: body },
-      trigger:
-        seconds === undefined
-          ? null
-          : {
-              seconds,
-            },
-    });
-  };
 
-  const handleShowNotification = () => {
-    scheduleNotification();
-  };
 
-  const handleScheduleNotification = () => {
-    scheduleNotification(15);
-  };
-
-  const { compter } = useCompter();
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
+      {/* // style={styles.container}> */}
       <View style={styles.content}>
         <Text style={styles.dateText}>{getDateDuJour()}</Text>
 
@@ -117,7 +97,7 @@ export default function TabOneScreen() {
               alignItems: "baseline",
             }}
           >
-            <Text style={{ fontSize: 25 }}>250 FCFA</Text>
+            <Text style={{ fontSize: 25 }}>750 FCFA</Text>
             <Text>par rapport a hier </Text>
           </View>
         </View>
@@ -149,19 +129,8 @@ export default function TabOneScreen() {
           </View>
         </TouchableOpacity>
       </View>
-      <TextInput
-        value={title}
-        onChangeText={(Text) => setTitle(Text)}
-        placeholder="title"
-        onPress={() => handleShowNotification()}
-      />
-      <TextInput
-        value={body}
-        onChangeText={(Text) => setTitle(Text)}
-        placeholder="body"
-        onPress={() => handleScheduleNotification}
-      />
-    </View>
+
+    </ScrollView>
   );
 }
 
