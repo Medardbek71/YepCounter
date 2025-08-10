@@ -23,18 +23,18 @@ const daily_report = () => {
   const [reason, setReason] = useState<string>("");
 
   const scheduleNotification = (seconds?: number) => {
-    console.log("Notification envoyé");
     Notifications.requestPermissionsAsync();
     Notifications.scheduleNotificationAsync({
       content: {
         body: "⏰ C'est déja l'heure du bilan",
       },
       trigger: {
-        type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
-        seconds: 10,
-        // repeats: true,
+        type: Notifications.SchedulableTriggerInputTypes.DAILY,
+        hour: 18,
+        minute: 52,
       },
     });
+    console.log("Notification quotidienne programmée");
   };
 
   const handleAction = async (): Promise<void> => {
