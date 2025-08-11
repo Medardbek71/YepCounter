@@ -5,37 +5,28 @@ import {
   TouchableOpacity,
   TextInput,
   Alert,
-  Pressable,
 } from "react-native";
 import { Image } from "expo-image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PrincipalButton from "@/components/PrincipalButton";
 import Colors from "@/constants/Colors";
 import databaseService from "@/services/DatabaseService";
 import { router } from "expo-router";
 import { getDateDuJour } from "@/utils/date";
 import * as Notifications from "expo-notifications";
-import { initializeNotifications } from "@/services/NotificationService";
 
 const daily_report = () => {
-  initializeNotifications();
+  useEffect(() => {
+    const subscription = Notifications.addNotificationReceivedListener(
+      (Response) => {
+        router.push("/daily_report");
+      }
+    );
+    subscription.remove();
+  }, []);
+
   const [amount, setAmount] = useState<number | undefined>(undefined);
   const [reason, setReason] = useState<string>("");
-
-  const scheduleNotification = (seconds?: number) => {
-    Notifications.requestPermissionsAsync();
-    Notifications.scheduleNotificationAsync({
-      content: {
-        body: "⏰ C'est déja l'heure du bilan",
-      },
-      trigger: {
-        type: Notifications.SchedulableTriggerInputTypes.DAILY,
-        hour: 18,
-        minute: 52,
-      },
-    });
-    console.log("Notification quotidienne programmée");
-  };
 
   const handleAction = async (): Promise<void> => {
     try {
@@ -117,9 +108,6 @@ const daily_report = () => {
         </TouchableOpacity>
         <Text> 0 dépenses ajouter a la liste</Text>
       </View>
-      <Pressable onPress={() => scheduleNotification()}>
-        <Text>Appuyer ici pour déclancher la notification</Text>
-      </Pressable>
       <PrincipalButton
         title="Terminer"
         onPress={handleAction}

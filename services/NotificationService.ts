@@ -11,4 +11,17 @@ export const initializeNotifications = () => {
       shouldSetBadge: true,
     }),
   });
+
+  Notifications.requestPermissionsAsync();
+  Notifications.scheduleNotificationAsync({
+    content: {
+      body: "⏰ C'est déja l'heure du bilan",
+    },
+    trigger: {
+      type: Notifications.SchedulableTriggerInputTypes.DAILY,
+      hour: 20,
+      minute: 0,
+    },
+  });
+  console.log("Notification quotidienne programmée");
 };

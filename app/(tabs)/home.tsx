@@ -1,31 +1,22 @@
-import {
-  StyleSheet,
-  TouchableOpacity,
-  Pressable,
-  ScrollView,
-} from "react-native";
+import { StyleSheet, TouchableOpacity, ScrollView } from "react-native";
 import { Image } from "expo-image";
 import Colors from "@/constants/Colors";
 import { router } from "expo-router";
 import { Text, View } from "@/components/Themed";
 import { getDateDuJour } from "@/utils/date";
 import MonthlySpendedAmount from "@/components/MonthlySpendedAmount";
-import { clearAllData, resetDatabase } from "@/database/init";
-import * as Notifications from "expo-notifications";
+import { initializeNotifications } from "@/services/NotificationService";
 
 export default function TabOneScreen() {
-  // clearAllData();
-  // resetDatabase();
-
-
+  initializeNotifications();
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {/* // style={styles.container}> */}
       <View style={styles.content}>
         <Text style={styles.dateText}>{getDateDuJour()}</Text>
 
         <TouchableOpacity
+          onPress={() => router.push("/spendedList")}
           style={[styles.box, { backgroundColor: Colors.dark.turquoise }]}
         >
           <Text style={styles.amountText}>{<MonthlySpendedAmount />}</Text>
@@ -129,7 +120,6 @@ export default function TabOneScreen() {
           </View>
         </TouchableOpacity>
       </View>
-
     </ScrollView>
   );
 }
