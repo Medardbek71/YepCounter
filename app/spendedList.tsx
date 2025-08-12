@@ -1,7 +1,6 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, ScrollView, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import databaseService from "@/services/DatabaseService";
-import { ScrollView } from "react-native-reanimated/lib/typescript/Animated";
 
 const spendedList = () => {
   const [reports, setReport] = useState<any>([]);
@@ -9,9 +8,9 @@ const spendedList = () => {
     const getReport = async () => {
       try {
         const reports = await databaseService.getAllReport();
-        console.log("voici les resultats de la requete", reports.data);
+        // console.log("voici les resultats de la requete", reports.data);
         setReport(reports.data);
-        console.log(reports);
+        // console.log(reports);
       } catch (error) {
         console.error(
           "nous ne parvenons pas a recuperer la liste des report nous rencontrons cette erreur",

@@ -12,14 +12,14 @@ const MonthlySpendedAmount = () => {
     }, [refetch])
   );
 
-  console.log(
-    "Debug - reports:",
-    reports,
-    "loading:",
-    loading,
-    "error:",
-    error
-  );
+  // console.log(
+  //   "Debug - reports:",
+  //   reports,
+  //   "loading:",
+  //   loading,
+  //   "error:",
+  //   error
+  // );
 
   if (loading) {
     return <Text>Chargement...</Text>;

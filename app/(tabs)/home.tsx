@@ -6,9 +6,11 @@ import { Text, View } from "@/components/Themed";
 import { getDateDuJour } from "@/utils/date";
 import MonthlySpendedAmount from "@/components/MonthlySpendedAmount";
 import { initializeNotifications } from "@/services/NotificationService";
+import { difference } from "@/utils/spendingDifference";
 
 export default function TabOneScreen() {
   initializeNotifications();
+  difference();
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
