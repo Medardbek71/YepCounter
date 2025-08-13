@@ -160,6 +160,7 @@ const styles = StyleSheet.create({
   backText: {
     fontSize: 16,
     color: Colors.dark.pink,
+    fontFamily: "SpaceGrotesk",
   },
   logo: {
     width: 150,
@@ -168,15 +169,18 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     margin: 15,
+    fontFamily: "SpaceGrotesk",
   },
   title: {
     fontSize: 36,
-    fontWeight: "bold",
+    // fontWeight: "bold",
+    fontFamily: "SpaceGrotesk",
   },
   label: {
     marginLeft: 15,
     fontSize: 15,
     fontWeight: "500",
+    fontFamily: "SpaceGrotesk",
   },
   textInput: {
     borderColor: Colors.dark.pink,
@@ -188,8 +192,10 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     alignSelf: "center",
     fontSize: 16,
+    fontFamily: "SpaceGrotesk",
   },
   textInputLabel: {
     marginBottom: 20,
+    fontFamily: "SpaceGrotesk",
   },
 });

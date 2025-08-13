@@ -78,8 +78,14 @@ const daily_report = () => {
           />
         </TouchableOpacity>
         <View style={{ margin: 15 }}>
-          <Text style={{ fontSize: 36 }}>Bilan de la journée</Text>
-          <Text style={{ fontSize: 15 }}>{getDateDuJour()}</Text>
+          <Text
+            style={{ fontSize: 40, lineHeight: 40, fontFamily: "SpaceGrotesk" }}
+          >
+            Bilan de la journée
+          </Text>
+          <Text style={{ fontSize: 15, fontFamily: "SpaceGrotesk" }}>
+            {getDateDuJour()}
+          </Text>
         </View>
         <View style={styles.textInputLabel}>
           <Text style={styles.label}>Montant de la dépense</Text>
@@ -104,9 +110,12 @@ const daily_report = () => {
           />
         </View>
         <TouchableOpacity onPress={() => addReport()} style={styles.addButton}>
-          <Text>ajouter a la liste</Text>
+          <Text style={{ fontFamily: "SpaceGrotesk" }}>ajouter a la liste</Text>
         </TouchableOpacity>
-        <Text> 0 dépenses ajouter a la liste</Text>
+        <Text style={{ fontFamily: "SpaceGrotesk" }}>
+          {" "}
+          0 dépenses ajouter a la liste
+        </Text>
       </View>
       <PrincipalButton
         title="Terminer"
@@ -129,6 +138,7 @@ const styles = StyleSheet.create({
   label: {
     marginLeft: 15,
     fontSize: 15,
+    fontFamily: "SpaceGrotesk",
   },
   textInput: {
     borderColor: Colors.dark.blueColor,
@@ -140,10 +150,12 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     alignSelf: "center",
     color: "black",
+    fontFamily: "SpaceGrotesk",
   },
   textInputLabel: {
     marginVertical: 20,
     marginBottom: 20,
+    fontFamily: "SpaceGrotesk",
   },
   addButton: {
     width: "50%",
@@ -157,5 +169,6 @@ const styles = StyleSheet.create({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+    fontFamily: "SpaceGrotesk",
   },
 });

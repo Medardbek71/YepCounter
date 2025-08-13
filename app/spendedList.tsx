@@ -22,11 +22,13 @@ const spendedList = () => {
   }, []);
   return (
     <ScrollView style={styles.container}>
-      <Text>Liste des dépense pour ce mois</Text>
+      <Text style={{ fontFamily: "SpaceGrotesk" }}>
+        Liste des dépense pour ce mois
+      </Text>
       {reports.reverse().map((report: any) => (
         <View style={styles.report} key={report.id_dailyReport}>
-          <Text>{report.reason}</Text>
-          <Text> - {report.amount}</Text>
+          <Text style={{ fontFamily: "SpaceGrotesk" }}>{report.reason}</Text>
+          <Text style={{ fontFamily: "SpaceGrotesk" }}> - {report.amount}</Text>
         </View>
       ))}
     </ScrollView>

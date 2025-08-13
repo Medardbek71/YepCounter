@@ -106,10 +106,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     marginVertical: 20,
+    fontFamily: "SpaceGrotesk",
   },
   headerText: {
     fontSize: 16,
     fontWeight: "600",
+    fontFamily: "SpaceGrotesk",
   },
   refreshButton: {
     padding: 8,
@@ -136,17 +138,20 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     fontSize: 16,
     marginBottom: 2,
+    fontFamily: "SpaceGrotesk",
   },
   compterNumber: {
     fontWeight: "500",
     fontSize: 14,
     color: "#333",
     marginBottom: 2,
+    fontFamily: "SpaceGrotesk",
   },
   compterDate: {
     fontWeight: "300",
     fontSize: 12,
     color: "#666",
+    fontFamily: "SpaceGrotesk",
   },
   centerContainer: {
     flex: 1,
@@ -158,27 +163,32 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontSize: 16,
     color: "#666",
+    fontFamily: "SpaceGrotesk",
   },
   errorText: {
     fontSize: 16,
     color: "red",
     textAlign: "center",
     marginBottom: 20,
+    fontFamily: "SpaceGrotesk",
   },
   emptyText: {
     fontSize: 16,
     color: "#666",
     textAlign: "center",
     marginBottom: 20,
+    fontFamily: "SpaceGrotesk",
   },
   retryButton: {
     backgroundColor: Colors.dark.pink,
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 8,
+    fontFamily: "SpaceGrotesk",
   },
   retryButtonText: {
     color: "white",
     fontWeight: "600",
+    fontFamily: "SpaceGrotesk",
   },
 });

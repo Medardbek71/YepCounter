@@ -7,10 +7,57 @@ import { getDateDuJour } from "@/utils/date";
 import MonthlySpendedAmount from "@/components/MonthlySpendedAmount";
 import { initializeNotifications } from "@/services/NotificationService";
 import { difference } from "@/utils/spendingDifference";
+import { useEffect, useState } from "react";
+
+interface SpendingData {
+  today: number;
+  yesterday: number;
+  difference: number;
+}
 
 export default function TabOneScreen() {
-  initializeNotifications();
-  difference();
+  const [spendingData, setSpendingData] = useState<SpendingData | null>(null);
+  const [streak, setStreak] = useState<number | null>();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    initializeNotifications();
+
+    const fetchSpendingData = async () => {
+      try {
+        const result = await difference();
+        if (result) {
+          setSpendingData(result);
+          setStreak(result.streak);
+          console.log("Voici les donnée", result.streak);
+          console.log(`Différence: ${result.difference}`);
+        }
+      } catch (error) {
+        console.error("Erreur lors du chargement des données:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSpendingData();
+  }, []);
+
+  // Fonction pour formater les montants
+  const formatAmount = (amount: number): string => {
+    return new Intl.NumberFormat("fr-FR").format(amount);
+  };
+
+  // Déterminer si la différence est positive ou négative
+  const getDifferenceDisplay = () => {
+    if (!spendingData) return { amount: 0, isPositive: false };
+
+    const isPositive = spendingData.difference <= 0;
+    const absoluteDifference = Math.abs(spendingData.difference);
+
+    return { amount: absoluteDifference, isPositive };
+  };
+
+  const { amount: diffAmount, isPositive } = getDifferenceDisplay();
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -51,8 +98,10 @@ export default function TabOneScreen() {
 
       <View style={styles.content3}>
         <View style={[styles.box3]}>
-          <Text style={{ fontSize: 30 }}>12</Text>
-          <Text>Jours</Text>
+          <Text style={{ fontSize: 30, fontFamily: "SpaceGrotesk" }}>
+            {streak}
+          </Text>
+          <Text style={{ fontFamily: "SpaceGrotesk" }}>Jours</Text>
         </View>
         <View
           style={[
@@ -73,7 +122,11 @@ export default function TabOneScreen() {
             }}
           >
             <Image
-              source={require("@/assets/images/up.svg")}
+              source={
+                isPositive
+                  ? require("@/assets/images/up.svg")
+                  : require("@/assets/images/down.svg")
+              }
               style={{
                 width: 50,
                 height: 30,
@@ -90,11 +143,22 @@ export default function TabOneScreen() {
               alignItems: "baseline",
             }}
           >
-            <Text style={{ fontSize: 25 }}>750 FCFA</Text>
-            <Text>par rapport a hier </Text>
+            <Text
+              style={{
+                fontSize: 25,
+                color: isPositive ? "green" : "red",
+                fontFamily: "SpaceGrotesk",
+              }}
+            >
+              {loading ? "..." : formatAmount(diffAmount)}
+            </Text>
+            <Text style={{ fontFamily: "SpaceGrotesk" }}>
+              par rapport à hier
+            </Text>
           </View>
         </View>
       </View>
+
       <View style={styles.content}>
         <TouchableOpacity
           style={[
@@ -117,8 +181,12 @@ export default function TabOneScreen() {
             />
           </View>
           <View style={{ marginLeft: 20 }}>
-            <Text style={{ fontSize: 25 }}>Bilan</Text>
-            <Text style={{ fontSize: 25 }}>journalier</Text>
+            <Text style={{ fontSize: 25, fontFamily: "SpaceGrotesk" }}>
+              Bilan
+            </Text>
+            <Text style={{ fontSize: 25, fontFamily: "SpaceGrotesk" }}>
+              journalier
+            </Text>
           </View>
         </TouchableOpacity>
       </View>
@@ -145,6 +213,7 @@ const styles = StyleSheet.create({
     color: Colors.light.text,
     marginBottom: 10,
     alignSelf: "baseline",
+    fontFamily: "SpaceGrotesk",
   },
   box: {
     height: 132,
@@ -155,20 +224,20 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   amountText: {
-    fontFamily: "Space-Grotesk",
+    fontFamily: "SpaceGrotesk",
     fontSize: 36,
-    fontWeight: "bold",
+    // fontWeight: "bold",
     color: "black",
     marginBottom: 8,
     alignSelf: "flex-start",
   },
   descriptionText: {
     fontSize: 16,
-    color: "black",
-    fontWeight: 300,
+
     textAlign: "center",
     opacity: 0.9,
     alignSelf: "flex-start",
+    fontFamily: "SpaceGrotesk",
   },
   content2: {
     display: "flex",
@@ -215,5 +284,24 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderWidth: 2,
     backgroundColor: Colors.dark.violet,
+  },
+  detailRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 8,
+    fontFamily: "SpaceGrotesk",
+  },
+  detailLabel: {
+    fontSize: 16,
+    fontWeight: "500",
+    color: Colors.light.text,
+    fontFamily: "SpaceGrotesk",
+  },
+  detailAmount: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: Colors.dark.text,
+    fontFamily: "SpaceGrotesk",
   },
 });

@@ -20,7 +20,9 @@ const CanalList = () => {
   }, []);
   return (
     <View>
-      <Text style={{ marginVertical: 20 }}>Liste des comptes disponibles</Text>
+      <Text style={{ marginVertical: 20, fontFamily: "SpaceGrotesk" }}>
+        Liste des comptes disponibles
+      </Text>
       {listOfCanal.map((canal) => {
         return (
           <TouchableOpacity

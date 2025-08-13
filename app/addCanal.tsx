@@ -104,8 +104,12 @@ const addCanal = () => {
           />
         </TouchableOpacity>
         <View style={{ margin: 15 }}>
-          <Text style={{ fontSize: 36 }}>Ajouter un</Text>
-          <Text style={{ fontSize: 36 }}>décodeur</Text>
+          <Text style={{ fontSize: 36, fontFamily: "SpaceGrotesk" }}>
+            Ajouter un
+          </Text>
+          <Text style={{ fontSize: 36, fontFamily: "SpaceGrotesk" }}>
+            décodeur
+          </Text>
         </View>
         <View style={styles.textInputLabel}>
           <Text style={styles.label}>Entrer le numéro de réabonnement</Text>
@@ -154,6 +158,7 @@ const styles = StyleSheet.create({
   label: {
     marginLeft: 15,
     fontSize: 15,
+    fontFamily: "SpaceGrotesk",
   },
   textInput: {
     borderColor: Colors.dark.yellow,
@@ -164,8 +169,10 @@ const styles = StyleSheet.create({
     padding: 4,
     borderRadius: 5,
     alignSelf: "center",
+    fontFamily: "SpaceGrotesk",
   },
   textInputLabel: {
     marginBottom: 20,
+    fontFamily: "SpaceGrotesk",
   },
 });
