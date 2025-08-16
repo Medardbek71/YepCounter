@@ -1,8 +1,6 @@
 import * as Notifications from "expo-notifications";
 
-export const initializeNotifications = () => {
-  // First, set the handler that will cause the notification
-  // to show the alert
+export const initializeNotifications = async () => {
   Notifications.setNotificationHandler({
     handleNotification: async () => ({
       shouldShowBanner: true,
@@ -12,8 +10,11 @@ export const initializeNotifications = () => {
     }),
   });
 
-  Notifications.requestPermissionsAsync();
-  Notifications.scheduleNotificationAsync({
+  await Notifications.requestPermissionsAsync();
+
+  await Notifications.cancelAllScheduledNotificationsAsync();
+
+  await Notifications.scheduleNotificationAsync({
     content: {
       body: "⏰ C'est déja l'heure du bilan",
     },
@@ -23,5 +24,4 @@ export const initializeNotifications = () => {
       minute: 0,
     },
   });
-  console.log("Notification quotidienne programmée");
 };

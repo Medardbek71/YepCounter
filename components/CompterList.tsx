@@ -5,13 +5,14 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from "react-native";
-import React from "react";
+import React, { useCallback, useState } from "react";
+import { useFocusEffect } from "expo-router";
 import { router } from "expo-router";
 import Colors from "@/constants/Colors";
-import { useCompter } from "@/hooks/useCompter";
+import databaseService from "@/services/DatabaseService";
 
 // Interface pour typer vos compteurs
-interface Compter {
+interface CompterInterface {
   id: number;
   label: string;
   number: string;
@@ -20,10 +21,25 @@ interface Compter {
 }
 
 const CompterList = () => {
-  // ✅ Utilisation correcte du hook
-  const { compter: compters, loading, error, refreshCompter } = useCompter();
+  const [compterList, setCompterList] = useState<any>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
-  console.log(compters["data"]);
+  useFocusEffect(
+    useCallback(() => {
+      const fetchAllCompter = async () => {
+        try {
+          setLoading(true); // ✅ Mettre loading à true au début
+          const compter = await databaseService.getAllCompter();
+          setCompterList(compter);
+        } catch (error) {
+          console.error(error);
+        } finally {
+          setLoading(false); // ✅ Mettre loading à false à la fin
+        }
+      };
+      fetchAllCompter();
+    }, []) // ✅ Tableau de dépendances ajouté
+  );
 
   // Gestion du loading
   if (loading) {
@@ -35,26 +51,11 @@ const CompterList = () => {
     );
   }
 
-  // Gestion des erreurs
-  if (error) {
-    return (
-      <View style={styles.centerContainer}>
-        <Text style={styles.errorText}>Erreur: {error}</Text>
-        <TouchableOpacity style={styles.retryButton} onPress={refreshCompter}>
-          <Text style={styles.retryButtonText}>Réessayer</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  }
-
-  // Gestion du cas où il n'y a pas de compteurs
-  if (!compters || compters.length === 0) {
+  // ✅ Gestion améliorée du cas où il n'y a pas de compteurs
+  if (!compterList || !compterList.data || compterList.data.length === 0) {
     return (
       <View style={styles.centerContainer}>
         <Text style={styles.emptyText}>Aucun compteur disponible</Text>
-        <TouchableOpacity style={styles.retryButton} onPress={refreshCompter}>
-          <Text style={styles.retryButtonText}>Actualiser</Text>
-        </TouchableOpacity>
       </View>
     );
   }
@@ -63,12 +64,10 @@ const CompterList = () => {
     <View>
       <View style={styles.header}>
         <Text style={styles.headerText}>Liste des comptes disponibles</Text>
-        <TouchableOpacity onPress={refreshCompter} style={styles.refreshButton}>
-          <Text style={styles.refreshButtonText}>🔄</Text>
-        </TouchableOpacity>
       </View>
 
-      {compters["data"].map((compter: Compter) => {
+      {compterList.data.map((compter: CompterInterface) => {
+        // ✅ Type corrigé
         return (
           <TouchableOpacity
             key={compter.id}

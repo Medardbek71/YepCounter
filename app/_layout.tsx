@@ -12,10 +12,8 @@ import "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useColorScheme } from "@/components/useColorScheme";
 import { StatusBar } from "expo-status-bar";
-import { initDatabase } from "@/database/init";
 import { Text } from "react-native";
-import { Provider } from "react-redux";
-import { store } from "@/store/store";
+import databaseService from "@/services/DatabaseService";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -34,6 +32,7 @@ export default function RootLayout() {
   const [loaded, error] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
     SpaceGrotesk: require("../assets/fonts/SpaceGrotesk-VariableFont_wght.ttf"),
+    SpaceGroteskBold: require("../assets/fonts/SpaceGrotesk-Bold.ttf"),
   });
 
   useEffect(() => {
@@ -61,8 +60,8 @@ function RootLayoutNav() {
   useEffect(() => {
     const setupDb = async (): Promise<void> => {
       try {
-        console.log("Initialisation de la base de donnée 3...");
-        await initDatabase();
+        console.log("Initialisation de la base de donnée...");
+        await databaseService.initDb();
         setDbInitialized(true);
       } catch (error) {
         console.error("Database error:", error);
@@ -90,12 +89,10 @@ function RootLayoutNav() {
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <Provider store={store}>
-        <SafeAreaView style={{ flex: 1 }}>
-          <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
-          <Stack screenOptions={{ headerShown: false }} />
-        </SafeAreaView>
-      </Provider>
+      <SafeAreaView style={{ flex: 1 }}>
+        <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
+        <Stack screenOptions={{ headerShown: false }} />
+      </SafeAreaView>
     </ThemeProvider>
   );
 }

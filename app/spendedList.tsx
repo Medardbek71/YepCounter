@@ -8,9 +8,7 @@ const spendedList = () => {
     const getReport = async () => {
       try {
         const reports = await databaseService.getAllReport();
-        // console.log("voici les resultats de la requete", reports.data);
         setReport(reports.data);
-        // console.log(reports);
       } catch (error) {
         console.error(
           "nous ne parvenons pas a recuperer la liste des report nous rencontrons cette erreur",
@@ -22,8 +20,14 @@ const spendedList = () => {
   }, []);
   return (
     <ScrollView style={styles.container}>
-      <Text style={{ fontFamily: "SpaceGrotesk" }}>
-        Liste des dépense pour ce mois
+      <Text
+        style={{
+          fontFamily: "SpaceGroteskBold",
+          marginVertical: 20,
+          fontSize: 20,
+        }}
+      >
+        Liste des dépenses pour ce mois
       </Text>
       {reports.reverse().map((report: any) => (
         <View style={styles.report} key={report.id_dailyReport}>

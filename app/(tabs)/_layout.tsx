@@ -18,19 +18,24 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
+        tabBarBackground: () => null,
+        sceneContainerStyle: { backgroundColor: "white" },
         tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
         // Disable the static render of the header on web
         // to prevent a hydration error in React Navigation v6.
         headerShown: false,
+        tabBarShowLabel: false,
         tabBarStyle: {
           height: 80,
-          width: "100%",
+          width: "60%",
           display: "flex",
           flexDirection: "row",
           justifyContent: "center",
           alignSelf: "center",
-          borderRadius: 20,
-          backgroundColor: "green",
+          borderRadius: 40,
+          backgroundColor: "#fff",
+          bottom: 50,
+          elevation: 10,
         },
         tabBarIconStyle: {
           display: "flex",
@@ -39,7 +44,6 @@ export default function TabLayout() {
           alignItems: "center",
           width: 75,
           height: 50,
-          // backgroundColor: "red",
         },
         tabBarLabelStyle: {
           fontSize: 10,

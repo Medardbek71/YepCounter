@@ -1,23 +1,25 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import React, { useEffect, useState } from "react";
-import { router } from "expo-router";
+import React, { useCallback, useState } from "react";
+import { router, useFocusEffect } from "expo-router";
 import Colors from "@/constants/Colors";
 import databaseService from "@/services/DatabaseService";
 
 const CanalList = () => {
   const [listOfCanal, setListOfCanal] = useState([]);
-  useEffect(() => {
-    const loadAllCanal = async (): Promise<void> => {
-      const response = await databaseService.getAllCanal();
-      if (response.success) {
-        setListOfCanal(response.data);
-        console.log("Voici la listes des abonement disponibles", listOfCanal);
-      } else {
-        console.error(response.error);
-      }
-    };
-    loadAllCanal();
-  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      const loadAllCanal = async (): Promise<void> => {
+        const response = await databaseService.getAllCanal();
+        if (response.success) {
+          setListOfCanal(response.data);
+        } else {
+          console.error(response.error);
+        }
+      };
+      loadAllCanal();
+    }, [])
+  );
   return (
     <View>
       <Text style={{ marginVertical: 20, fontFamily: "SpaceGrotesk" }}>

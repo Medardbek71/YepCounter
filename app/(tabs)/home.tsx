@@ -1,13 +1,13 @@
 import { StyleSheet, TouchableOpacity, ScrollView } from "react-native";
 import { Image } from "expo-image";
 import Colors from "@/constants/Colors";
-import { router } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import { Text, View } from "@/components/Themed";
 import { getDateDuJour } from "@/utils/date";
 import MonthlySpendedAmount from "@/components/MonthlySpendedAmount";
 import { initializeNotifications } from "@/services/NotificationService";
 import { difference } from "@/utils/spendingDifference";
-import { useEffect, useState } from "react";
+import { useState, useCallback } from "react";
 
 interface SpendingData {
   today: number;
@@ -20,32 +20,33 @@ export default function TabOneScreen() {
   const [streak, setStreak] = useState<number | null>();
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    initializeNotifications();
-
-    const fetchSpendingData = async () => {
-      try {
-        const result = await difference();
-        if (result) {
-          setSpendingData(result);
-          setStreak(result.streak);
-          console.log("Voici les donnée", result.streak);
-          console.log(`Différence: ${result.difference}`);
+  useFocusEffect(
+    useCallback(() => {
+      const fetchSpendingData = async () => {
+        try {
+          setLoading(true);
+          const result = await difference();
+          if (result) {
+            setSpendingData(result);
+            setStreak(result.streak);
+          }
+        } catch (error) {
+          console.error("Erreur lors du chargement des données:", error);
+        } finally {
+          setLoading(false);
         }
-      } catch (error) {
-        console.error("Erreur lors du chargement des données:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+      };
 
-    fetchSpendingData();
-  }, []);
+      fetchSpendingData();
+    }, [])
+  );
 
   // Fonction pour formater les montants
   const formatAmount = (amount: number): string => {
     return new Intl.NumberFormat("fr-FR").format(amount);
   };
+
+  initializeNotifications();
 
   // Déterminer si la différence est positive ou négative
   const getDifferenceDisplay = () => {
@@ -196,7 +197,7 @@ export default function TabOneScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 1.5,
     backgroundColor: "white",
     display: "flex",
     flexDirection: "column",
@@ -224,7 +225,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   amountText: {
-    fontFamily: "SpaceGrotesk",
+    fontFamily: "SpaceGroteskBold",
     fontSize: 36,
     // fontWeight: "bold",
     color: "black",
@@ -233,7 +234,6 @@ const styles = StyleSheet.create({
   },
   descriptionText: {
     fontSize: 16,
-
     textAlign: "center",
     opacity: 0.9,
     alignSelf: "flex-start",

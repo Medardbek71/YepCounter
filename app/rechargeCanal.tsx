@@ -4,6 +4,7 @@ import PrincipalButton from "@/components/PrincipalButton";
 import Colors from "@/constants/Colors";
 import React, { useState } from "react";
 import { useLocalSearchParams } from "expo-router";
+import { formatNumber } from "@/utils/formatNumber";
 
 const RechargeCanal = () => {
   const { data } = useLocalSearchParams();
@@ -52,7 +53,9 @@ const RechargeCanal = () => {
           />
         </TouchableOpacity>
         <View style={{ margin: 15, marginTop: 50 }}>
-          <Text style={{ fontSize: 36 }}>{rechargeInfo.label}</Text>
+          <Text style={{ fontSize: 20, fontFamily: "SpaceGroteskBold" }}>
+            {rechargeInfo.label}
+          </Text>
         </View>
         <View style={styles.textInputLabel}>
           <Text style={styles.label}>Numéro de réabonnement</Text>
@@ -77,7 +80,7 @@ const RechargeCanal = () => {
             <Text style={styles.label}>Formule choisi</Text>
             <Text style={styles.label}>{actualFormule.title || "Access"}</Text>
             <Text style={[styles.label]}>
-              {actualFormule.price || "5 000"} FCFA
+              {formatNumber(actualFormule.price) || "5 000"} FCFA
             </Text>
           </View>
           <View>
@@ -102,8 +105,10 @@ const RechargeCanal = () => {
               style={styles.formuleItem}
               onPress={() => handleNewFormule(key, value)}
             >
-              <Text>{key}:</Text>
-              <Text>{value} FCFA</Text>
+              <Text style={{ fontFamily: "SpaceGrotesk" }}>{key}:</Text>
+              <Text style={{ fontFamily: "SpaceGrotesk" }}>
+                {formatNumber(value)} FCFA
+              </Text>
             </TouchableOpacity>
           ))}
         </View>
@@ -129,6 +134,7 @@ const styles = StyleSheet.create({
   label: {
     marginLeft: 15,
     fontSize: 15,
+    fontFamily: "SpaceGrotesk",
   },
   textInput: {
     borderColor: Colors.dark.pink,

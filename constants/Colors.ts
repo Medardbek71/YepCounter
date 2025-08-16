@@ -23,7 +23,7 @@ export default {
     turquoise: "#74F2CE",
     borderColor: "#0A3200",
     blueColor: "#6DB1BF",
-    violet: "#be95b7ff",
+    violet: "#825885ff",
     green: "#5C8360",
     yellow: "#FFD23F",
     pink: "#FFCDD2",

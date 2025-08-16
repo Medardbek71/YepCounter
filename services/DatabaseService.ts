@@ -26,7 +26,6 @@ class DatabaseService {
     if (!this.db) {
       try {
         this.db = await SQLite.openDatabaseAsync("MoneyLook.db");
-
         // IMPORTANT: Créer les tables si elles n'existent pas
         if (!this.isInitialized) {
           await this.createTables();
@@ -213,8 +212,6 @@ class DatabaseService {
         reason,
         Date.now(),
       ]);
-      console.log("bilan ajouté de", amount);
-      console.log(results.lastInsertRowId);
       return {
         success: true,
         insertedId: results.lastInsertRowId,
@@ -257,10 +254,19 @@ class DatabaseService {
   // Méthode pour réinitialiser la base de données (utile pour debug)
   async resetDb(): Promise<void> {
     try {
-      await this.closeDb();
+      // await this.closeDb();
       // Supprimer et recréer la base
       this.db = await SQLite.openDatabaseAsync("MoneyLook.db");
-      await this.db.execAsync("DROP TABLE IF EXISTS compteurs;");
+      // ✅ Après (correct)
+      const tablesToDrop = [
+        "CompterEneo",
+        "CanalAbo",
+        "Daily_Report",
+        "Subscription",
+      ];
+      for (const tableName of tablesToDrop) {
+        await this.db.execAsync(`DROP TABLE IF EXISTS ${tableName}`);
+      }
       await this.createTables();
       this.isInitialized = true;
     } catch (error) {
