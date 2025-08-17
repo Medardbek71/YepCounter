@@ -4,6 +4,7 @@ import { Tabs } from "expo-router";
 
 import Colors from "@/constants/Colors";
 import { useColorScheme } from "@/components/useColorScheme";
+import { View } from "react-native";
 
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>["name"];
@@ -18,37 +19,45 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarBackground: () => null,
-        sceneContainerStyle: { backgroundColor: "white" },
         tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
-        // Disable the static render of the header on web
-        // to prevent a hydration error in React Navigation v6.
         headerShown: false,
         tabBarShowLabel: false,
         tabBarStyle: {
-          height: 80,
-          width: "60%",
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "center",
-          alignSelf: "center",
-          borderRadius: 40,
-          backgroundColor: "#fff",
+          position: "absolute",
+          height: 70,
+          width: "100%",
+          borderTopWidth: 0,
           bottom: 50,
-          elevation: 10,
+          backgroundColor: "transparent",
+          elevation: 0,
         },
         tabBarIconStyle: {
-          display: "flex",
-          flexDirection: "row",
           justifyContent: "center",
           alignItems: "center",
-          width: 75,
+          width: 50,
           height: 50,
         },
-        tabBarLabelStyle: {
-          fontSize: 10,
-          color: "white",
+        tabBarItemStyle: {
+          flex: 1,
+          width: 1,
+          justifyContent: "center",
+          alignItems: "center",
         },
+        tabBarBackground: () => (
+          <View
+            style={{
+              flex: 1,
+              alignSelf: "center",
+              backgroundColor: "#a3ba64",
+              borderRadius: 45,
+              height: 75,
+              width: "70%",
+              borderColor: "black",
+              borderWidth: 1,
+              padding: 10,
+            }}
+          />
+        ),
       }}
     >
       <Tabs.Screen

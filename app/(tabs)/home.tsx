@@ -147,7 +147,7 @@ export default function TabOneScreen() {
             <Text
               style={{
                 fontSize: 25,
-                color: isPositive ? "green" : "red",
+                color: isPositive ? "#1bce39" : "red",
                 fontFamily: "SpaceGrotesk",
               }}
             >
